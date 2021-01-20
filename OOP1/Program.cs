@@ -6,8 +6,6 @@ namespace OOP1
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello World!");
-
             Product product1 = new Product();
             product1.Id = 1;
             product1.CategoryId = 2;
