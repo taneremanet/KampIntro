@@ -27,7 +27,11 @@ namespace OOP1
             // PascalCase // camelCase
             // case sensitive
             ProductManager productManager = new ProductManager();
-            productManager.Add();
+            productManager.Add(product1);
+
+            // int, double, bool... değer tip
+            // diziler, class, abstract, interface... referans tip
+            // ref out
         }
     }
 }
