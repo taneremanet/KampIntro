@@ -1,0 +1,98 @@
+-- Select (sql server case insensitive)
+select * from Customers
+
+select ContactName, CompanyName, City from Customers
+
+select ContactName Adi, CompanyName SirketAdi, City SehirAdi from Customers
+
+select * from Customers where city = 'London'  -- tek týrnak metinsel ifade
+
+select * from Products
+
+select * from Products where categoryId = 1
+
+select * from Products where categoryId = 1 or categoryId = 3
+
+select * from Products where categoryId = 1 and UnitPrice >= 10 -- <> farklý olan demek
+
+select * from Products order by ProductName -- butun urunleri sec, urun adýna gore sýrala
+
+select * from Products order by CategoryId, ProductName -- her kategoriyi alfabetik sýralama
+
+select * from Products order by UnitPrice asc -- urunleri artan fiyata gore sýralar (ascending default)
+
+select * from Products order by UnitPrice desc -- urunleri azalan fiyata gore sýrala (descending)
+
+select * from Products where categoryID = 1 order by UnitPrice desc -- category id si 1 olanlarý azalan fiyata gore
+
+select count(*) from Products -- tablonun satýr sayýsýný veriyor
+
+select count(*) from Products where categoryId = 2 -- iki numaralý category id de kaç farklý urun var?
+
+select count(*) Adet from Products where categoryId = 2 -- Sonucu Adet olarak isimlendirir
+
+-- group by
+-- hangi kategoride kac farklý urunumuz var?
+
+select count(*) Adet from Products -- tumunu gosterir
+
+--select * from products group by categoryId -- yanlýþ
+
+select categoryId from products group by categoryId -- butun kategorileri tekrarsýz listele
+
+select categoryId, count(*) from products group by categoryId -- her kategoride kac urun var?
+
+-- urun cesit sayýsý 10 dan az olan kategorileri listele
+select categoryId, count(*) from products group by categoryId having count(*) < 10
+
+-- birim fiyatý 20 den fazla olan urunleri kategory id ye gore grupla, her gurupta 10 dan az olanlari listele
+select categoryId, count(*) from products where UnitPrice >20 
+group by categoryId having count(*) < 10
+
+-- JOIN
+
+select * 
+from Products inner join Categories -- hem prodcuts hem de categories'in bir araya getirilmis hali
+on Products.CategoryID = Categories.CategoryID -- eþitlerse birleþtir koþulu
+
+select Products.ProductID, Products.ProductName, Products.UnitPrice, Categories.CategoryName 
+from Products inner join Categories 
+on Products.CategoryID = Categories.CategoryID
+
+-- DTO Data Transformation Object (c# icin)
+
+-- fiyati 10 dan büyük olan urunleri kategori ismi ile getir
+select Products.ProductID, Products.ProductName, Products.UnitPrice, Categories.CategoryName 
+from Products inner join Categories 
+on Products.CategoryID = Categories.CategoryID
+where Products.UnitPrice > 10
+
+-- inner join sadece ESLESEN kayýtlari (iki tabloda da) getirir
+select * from Products p inner join [Order Details] od
+on p.ProductID = od.ProductID
+
+-- hic satis yapamadýgimiz urunler nelerdir icin ise
+-- solda olup sagda olmayanlarý da getir (urunlerde var, satislarda yok gibi)
+-- bir ustteki ile esit cýkarsa eslesmeyen yok demektir
+select * from Products p left join [Order Details] od
+on p.ProductID = od.ProductID
+
+-- eslesenler 830
+select * from Customers c inner join Orders o
+on c.CustomerID = o.CustomerID
+
+-- eslesmeyenler 832 (solda olup sagda olmayan yani null gelen)
+select * from Customers c left join Orders o
+on c.CustomerID = o.CustomerID
+
+-- sana ozel indirim sorgusu ornegi
+-- fissa ve paris musterileri bizden hic urun satin almamýs diye yorumlanýr
+select * from Customers c left join Orders o
+on c.CustomerID = o.CustomerID
+where o.CustomerID is null
+
+-- 3 (uc) tabloyu birlestirme
+select * from Products p inner join [Order Details] od
+on p.ProductID = od.ProductID
+inner join Orders o
+on o.OrderId = od.OrderID
